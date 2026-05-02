@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h2 class="text-center text-danger mb-4">Inscription</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label>Vous êtes :</label>
+                    <select name="role" id="role-select" class="form-select">
+                        <option value="donneur">Donneur</option>
+                        <option value="hopital">Hôpital</option>
+                    </select>
+                </div>
+
+                <div id="donneur-username" class="mb-3 fade-box">
+                    <label>Nom d'utilisateur</label>
+                    <input name="username" class="form-control">
+                </div>
+
+                <div id="hopital-nom" class="mb-3 fade-box" style="display:none;">
+                    <label>Nom Hôpital</label>
+                    <input type="text" name="nom_hopital" class="form-control">
+                </div>
+
+                <div id="donneur-fields" class="fade-box">
+                    <div class="mb-3">
+                        <label>Sexe</label>
+                        <select name="sexe" class="form-select">
+                            <option value="M">Homme</option>
+                            <option value="F">Femme</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Date de Naissance</label>
+                        <input type="date" name="date_naissance" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Groupe Sanguin</label>
+                        <select name="groupe_sanguin" class="form-select">
+                            <option value="A+">A+</option>
+                            <option value="O+">O+</option>
+                            <option value="B+">B+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="hopital-fields" class="fade-box" style="display:none;">
+                    <div class="mb-3">
+                        <label>Adresse</label>
+                        <input type="text" name="adresse" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Mot de passe</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label>Ville</label>
+                    <input name="ville" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100" >Créer mon compte</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.fade-box{
+    transition: all 0.3s ease;
+}
+.hide{
+    opacity:0;
+    transform: translateY(-10px);
+    pointer-events:none;
+}
+.show{
+    opacity:1;
+    transform: translateY(0);
+}
+</style>
+
+<script>
+const role = document.getElementById("role-select")
+
+const donorUser = document.getElementById("donneur-username")
+const hopitalNom = document.getElementById("hopital-nom")
+
+const donorFields = document.getElementById("donneur-fields")
+const hopitalFields = document.getElementById("hopital-fields")
+
+function show(el){
+    el.style.display="block"
+    setTimeout(()=>el.classList.add("show"),10)
+    el.classList.remove("hide")
+}
+
+function hide(el){
+    el.classList.remove("show")
+    el.classList.add("hide")
+    setTimeout(()=>el.style.display="none",300)
+}
+
+function toggle(){
+    if(role.value === "hopital"){
+        hide(donorUser)
+        hide(donorFields)
+
+        show(hopitalNom)
+        show(hopitalFields)
+    } else {
+        show(donorUser)
+        show(donorFields)
+
+        hide(hopitalNom)
+        hide(hopitalFields)
+    }
+}
+
+role.addEventListener("change", toggle)
+toggle()
+</script>
+
+{% endblock %}

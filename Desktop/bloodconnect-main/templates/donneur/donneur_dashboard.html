@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Section Profile (Left Column) -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100">
+                <div class="profile-image-container mb-3 position-relative">
+                    {% if donneur.photo %}
+                        <img src="{{ donneur.photo.url }}" alt="Profile" class="rounded-circle img-thumbnail shadow-sm" style="width: 160px; height: 160px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 160px; height: 160px;">
+                            <i class="fas fa-user fa-4x text-secondary"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <h3 class="fw-bold mb-1">{{ request.user.username }}</h3>
+                <p class="text-muted mb-3">{{ request.user.email }}</p>
+                
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    <span class="badge bg-danger px-3 py-2 fs-6">
+                        <i class="fas fa-tint me-1"></i> {{ donneur.groupe_sanguin }}
+                    </span>
+                    <span class="badge bg-primary px-3 py-2 fs-6">
+                        <i class="fas fa-location-dot me-1"></i> {{ donneur.ville }}
+                    </span>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="text-start">
+                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Informations Personnelles</h6>
+                    <div class="mb-2">
+                        <small class="text-muted d-block">Téléphone</small>
+                        <span>{{ donneur.telephone|default:"Non renseigné" }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted d-block">Adresse</small>
+                        <span>{{ donneur.adresse|default:"Non renseignée" }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted d-block">Sexe</small>
+                        <span>{{ donneur.sexe }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Modification (Right Column) -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-danger bg-opacity-10 p-3 rounded-3 me-3">
+                        <i class="fas fa-user-edit text-danger fs-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold">Modifier le Profil</h4>
+                        <p class="text-muted mb-0 small">Mettez à jour vos coordonnées et votre photo</p>
+                    </div>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Photo de Profil -->
+                        <div class="col-12 mb-4">
+                            <label class="form-label fw-bold small text-uppercase">Photo de profil</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fas fa-image text-muted"></i></span>
+                                <input type="file" name="photo" class="form-control" id="id_photo">
+                            </div>
+                            <div class="form-text mt-1">Format recommandé: JPG ou PNG (carré).</div>
+                        </div>
+
+                        <!-- Ville & Téléphone -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small text-uppercase">Ville</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                                <input type="text" name="ville" value="{{ donneur.ville }}" class="form-control" placeholder="Votre ville">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small text-uppercase">Téléphone</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fas fa-phone text-muted"></i></span>
+                                <input type="text" name="telephone" value="{{ donneur.telephone|default:'' }}" class="form-control" placeholder="Numéro de téléphone">
+                            </div>
+                        </div>
+
+                        <!-- Adresse -->
+                        <div class="col-12 mb-4">
+                            <label class="form-label fw-bold small text-uppercase">Adresse Résidentielle</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fas fa-home text-muted"></i></span>
+                                <textarea name="adresse" class="form-control" rows="3" placeholder="Votre adresse complète">{{ donneur.adresse|default:'' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 text-end">
+                        <button type="submit" class="btn btn-danger px-5 py-2 rounded-pill shadow-sm fw-bold">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Chwaya tweaks bech yji design modern */
+    .card {
+        border-radius: 20px !important;
+    }
+    .input-group-text {
+        border-right: none !important;
+        border-radius: 12px 0 0 12px !important;
+    }
+    .form-control {
+        border-left: none !important;
+        border-radius: 0 12px 12px 0 !important;
+        padding: 10px 15px;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #dee2e6;
+    }
+    .btn-danger {
+        background-color: var(--blood-red);
+        border: none;
+        transition: transform 0.2s;
+    }
+    .btn-danger:hover {
+        background-color: var(--blood-red-dark);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

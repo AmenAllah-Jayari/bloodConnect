@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="welcome-section mb-4">
+    <div class="card blood-card p-4">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <h2 class="mb-2">Bienvenue Hôpital 🏥</h2>
+                <p class="mb-0 opacity-75">Gérez vos demandes et sauvez des vies !</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Nom Hôpital</h5>
+            <h5 class="my-2" style="color: var(--blood-red);">
+                {{ request.user.hopital.nom }}
+            </h5>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Adresse</h5>
+            <p class="text-muted">
+                {{ request.user.hopital.adresse }}
+            </p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Ville</h5>
+            <h5 class="my-2" style="color: var(--blood-red);">
+                {{ request.user.hopital.ville }}
+            </h5>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Demandes Actives</h5>
+            <h2 class="my-2" style="color: var(--blood-red);">3</h2>
+            <p class="text-muted">en cours</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Total Demandes</h5>
+            <h2 class="my-2" style="color: var(--blood-red);">10</h2>
+            <p class="text-muted">publiées</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title">Statut</h5>
+            <span class="badge bg-success">Validé</span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-12">
+        <div class="card p-4">
+            <h4 class="mb-4">Activité</h4>
+            <p class="text-muted">
+                Suivez vos demandes urgentes et les réponses des donneurs.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Kenet haka: <a href="#" class="btn-blood"> -->
+<div class="text-center mt-4">
+    <a href="{% url 'hopital:creer_demande' %}" class="btn-blood text-decoration-none">
+        Créer une demande urgente
+    </a>
+</div>
+
+{% endblock %}

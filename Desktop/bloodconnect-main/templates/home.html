@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Section 1: Carousel des Campagnes de Sensibilisation -->
+<div id="campaignCarousel" class="carousel slide mb-5 shadow rounded-4 overflow-hidden" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="blood-card p-5 text-center" style="min-height: 300px; display: flex; flex-direction: column; justify-content: center;">
+                <h2 class="display-4 fw-bold">تبرع بالدم، أنقذ حياة 🩸</h2>
+                <p class="lead">Participez à notre grande campagne nationale de don de sang.</p>
+                <div>
+                    <button class="btn btn-light btn-lg rounded-pill px-4 text-danger fw-bold">En savoir plus</button>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="bg-dark text-white p-5 text-center" style="min-height: 300px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(45deg, #E63946, #457B9D) !important;">
+                <h2 class="display-4 fw-bold">Campagne de Sensibilisation</h2>
+                <p class="lead">Le don de sang régulier est essentiel pour nos hôpitaux.</p>
+                <div>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg rounded-pill px-4">Devenir Donneur</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#campaignCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#campaignCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Section 2: Annonces Urgentes des Hôpitaux -->
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-danger">⚠️ Demandes Urgentes</h3>
+        <span class="badge bg-danger pulse-animation">LIVE</span>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Exemple d'annonce urgent (Hôpital) -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-start border-danger border-5">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="card-title fw-bold">Hôpital Charles Nicolle</h5>
+                        <span class="badge bg-light text-danger border border-danger">O- Urgent</span>
+                    </div>
+                    <p class="text-muted mb-3"><i class="bi bi-geo-alt-fill"></i> Tunis, Tunisie</p>
+                    <p class="card-text">Besoin critique de donneurs de groupe O négatif pour une intervention chirurgicale.</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-blood w-100">Répondre à l'appel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deuxième exemple -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-start border-warning border-5">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="card-title fw-bold">Hôpital Sahloul</h5>
+                        <span class="badge bg-light text-warning border border-warning">A+ Requis</span>
+                    </div>
+                    <p class="text-muted mb-3"><i class="bi bi-geo-alt-fill"></i> Sousse, Tunisie</p>
+                    <p class="card-text">Stock de sang A+ en baisse. Nous invitons les donneurs à se présenter.</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-outline-danger w-100 rounded-pill">Voir détails</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Animation pour le badge LIVE */
+.pulse-animation {
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+}
+
+.carousel-item {
+    transition: transform 0.8s ease-in-out;
+}
+</style>
+{% endblock %}

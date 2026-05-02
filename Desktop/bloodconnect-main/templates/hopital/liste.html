@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Résultats de recherche pour les Hôpitaux</h2>
+    
+    <div class="row">
+        {% for hopital in hopitaux %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">{{ hopital.nom }}</h5>
+                        <p class="card-text">
+                            <strong>Adresse:</strong> {{ hopital.adresse }}<br>
+                            <strong>Téléphone:</strong> {{ hopital.telephone }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning">Aucun hôpital trouvé pour cette recherche.</div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <a href="/" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+</div>
+{% endblock %}
