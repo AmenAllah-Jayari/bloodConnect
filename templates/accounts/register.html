@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h2 class="text-center text-danger mb-4">Inscription</h2>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Vous êtes :</label>
+                    <select name="role" class="form-select" required>
+                        <option value="donneur">Donneur</option>
+                        <option value="hopital">Hôpital</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nom d'utilisateur</label>
+                    <input name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+    <label>Sexe</label>
+    <select name="sexe" class="form-select" required>
+        <option value="M">Homme</option>
+        <option value="F">Femme</option>
+    </select>
+</div>
+<div class="mb-3">
+    <label class="form-label">Date de Naissance</label>
+    <input type="date" name="date_naissance" class="form-control" required>
+</div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                
+
+                <div class="mb-3">
+                    <label class="form-label">Groupe Sanguin</label>
+                    <select name="groupe_sanguin" class="form-select">
+                        <option value="A+">A+</option>
+                        <option value="O+">O+</option>
+                        <option value="B+">B+</option>
+                        </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ville</label>
+                    <input name="ville" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100">Créer mon compte</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
