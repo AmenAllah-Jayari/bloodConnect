@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="welcome-section mb-4">
+    <div class="card p-4" style="background: linear-gradient(135deg, var(--blood-red), var(--blood-red-dark)); color: white;">
+        <h2 class="mb-1"><i class="fas fa-hospital me-2"></i>Bienvenue, {{ hopital.nom }} 🏥</h2>
+        <p class="mb-0 opacity-75">{{ hopital.adresse }} — {{ hopital.ville }}</p>
+    </div>
+</div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+      {{ msg }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Statistiques -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title text-muted">Demandes Actives</h5>
+            <h2 class="my-2" style="color: var(--blood-red);">{{ demandes_actives }}</h2>
+            <p class="text-muted mb-0">en cours</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title text-muted">Total Demandes</h5>
+            <h2 class="my-2" style="color: var(--blood-red);">{{ total_demandes }}</h2>
+            <p class="text-muted mb-0">publiées</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4 text-center">
+            <h5 class="card-title text-muted">En attente de confirmation</h5>
+            <h2 class="my-2 text-warning">{{ reponses_en_attente.count }}</h2>
+            <p class="text-muted mb-0">réponses à traiter</p>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mb-4">
+    <a href="{% url 'hopital:creer_demande' %}" class="btn-blood text-decoration-none px-5 py-3">
+        <i class="fas fa-plus me-2"></i>Créer une demande urgente
+    </a>
+</div>
+
+<!-- Réponses en attente de confirmation -->
+{% if reponses_en_attente %}
+<div class="card p-4 mb-4 border-warning border-2">
+    <h4 class="mb-4 fw-bold">
+        <i class="fas fa-bell text-warning me-2"></i>
+        Réponses à confirmer
+        <span class="badge bg-warning text-dark ms-2">{{ reponses_en_attente.count }}</span>
+    </h4>
+    <p class="text-muted small mb-3">
+        Confirmez la présence d'un donneur pour enregistrer automatiquement son don.
+    </p>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Donneur</th>
+                    <th>Groupe sanguin</th>
+                    <th>Demande concernée</th>
+                    <th>Date réponse</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rep in reponses_en_attente %}
+                <tr>
+                    <td>
+                        <strong>{{ rep.donneur.user.username }}</strong>
+                        {% if rep.donneur.telephone %}
+                          <br><small class="text-muted"><i class="fas fa-phone me-1"></i>{{ rep.donneur.telephone }}</small>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge bg-danger fs-6">{{ rep.donneur.groupe_sanguin }}</span></td>
+                    <td>
+                        {{ rep.demande.groupe_sanguin }} — {{ rep.demande.quantite }} poche(s)
+                        <br><small class="text-muted">Délai : {{ rep.demande.delai|date:"d/m/Y" }}</small>
+                    </td>
+                    <td><small class="text-muted">{{ rep.date_reponse|date:"d/m/Y H:i" }}</small></td>
+                    <td class="text-center">
+                        <div class="d-flex gap-2 justify-content-center">
+                            <form action="{% url 'hopital:confirmer_reponse' rep.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm rounded-pill px-3">
+                                    <i class="fas fa-check me-1"></i> Confirmer le don
+                                </button>
+                            </form>
+                            <form action="{% url 'hopital:refuser_reponse' rep.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                    <i class="fas fa-times me-1"></i> Refuser
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Liste des demandes -->
+{% if demandes %}
+<div class="card p-4 mt-2">
+    <h4 class="mb-4 fw-bold"><i class="fas fa-list me-2 text-danger"></i>Mes demandes</h4>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Groupe sanguin</th>
+                    <th>Quantité</th>
+                    <th>Délai</th>
+                    <th>Statut</th>
+                    <th>Réponses</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in demandes %}
+                <tr>
+                    <td><span class="badge bg-danger fs-6">{{ d.groupe_sanguin }}</span></td>
+                    <td>{{ d.quantite }} poches</td>
+                    <td>{{ d.delai|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if d.statut == 'active' %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ d.statut }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ d.reponses.count }} donneur(s)</td>
+                    <td><small class="text-muted">{{ d.date_publication|date:"d/m/Y" }}</small></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info text-center mt-3">
+    <i class="fas fa-info-circle me-2"></i>Aucune demande publiée pour le moment.
+</div>
+{% endif %}
+
+{% endblock %}

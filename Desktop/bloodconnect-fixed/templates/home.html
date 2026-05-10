@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Section 1: Carousel des Campagnes -->
+<div id="campaignCarousel"
+     class="carousel slide mb-5 shadow rounded-4 overflow-hidden"
+     data-bs-ride="carousel">
+
+    <div class="carousel-inner">
+
+        <div class="carousel-item active">
+
+            <div class="blood-card p-5 text-center"
+                 style="min-height: 300px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;">
+
+                <h2 class="display-4 fw-bold">
+                    تبرع بالدم، أنقذ حياة 🩸
+                </h2>
+
+                <p class="lead">
+                    Participez à notre grande campagne nationale de don de sang.
+                </p>
+
+                <div>
+                    <button class="btn btn-light btn-lg rounded-pill px-4 text-danger fw-bold">
+                        En savoir plus
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="carousel-item">
+
+            <div class="bg-dark text-white p-5 text-center"
+                 style="min-height: 300px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        background: linear-gradient(45deg, #E63946, #457B9D) !important;">
+
+                <h2 class="display-4 fw-bold">
+                    Campagne de Sensibilisation
+                </h2>
+
+                <p class="lead">
+                    Le don de sang régulier est essentiel pour nos hôpitaux.
+                </p>
+
+                <div>
+                    <a href="{% url 'accounts:register' %}"
+                       class="btn btn-outline-light btn-lg rounded-pill px-4">
+
+                        Devenir Donneur
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <button class="carousel-control-prev"
+            type="button"
+            data-bs-target="#campaignCarousel"
+            data-bs-slide="prev">
+
+        <span class="carousel-control-prev-icon"
+              aria-hidden="true"></span>
+
+        <span class="visually-hidden">
+            Previous
+        </span>
+
+    </button>
+
+    <button class="carousel-control-next"
+            type="button"
+            data-bs-target="#campaignCarousel"
+            data-bs-slide="next">
+
+        <span class="carousel-control-next-icon"
+              aria-hidden="true"></span>
+
+        <span class="visually-hidden">
+            Next
+        </span>
+
+    </button>
+
+</div>
+
+
+<!-- Section 2: Demandes Urgentes -->
+<div class="container mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3 class="fw-bold text-danger">
+            ⚠️ Demandes Urgentes
+        </h3>
+
+        <span class="badge bg-danger pulse-animation">
+            LIVE
+        </span>
+
+    </div>
+
+    <div class="row g-4">
+
+        {% for demande in demandes %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card h-100 border-start border-danger border-5 shadow-sm">
+
+                <div class="card-body d-flex flex-column">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <h5 class="card-title fw-bold">
+                            {{ demande.hopital.nom }}
+                        </h5>
+
+                        <span class="badge bg-light text-danger border border-danger">
+                            {{ demande.groupe_sanguin }}
+                        </span>
+
+                    </div>
+
+                    <p class="text-muted mb-3">
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        {{ demande.hopital.ville }}
+
+                    </p>
+
+                    <p class="card-text">
+                        {{ demande.description }}
+                    </p>
+
+                    <p>
+                        <strong>Quantité :</strong>
+                        {{ demande.quantite }} poches
+                    </p>
+
+                    <p>
+                        <strong>Délai :</strong>
+                        {{ demande.delai }}
+                    </p>
+
+                    <div class="mt-auto">
+    {% if user.is_authenticated and user.donneur %}
+        {% if not user.donneur.actif %}
+            <button class="btn btn-secondary w-100 rounded-pill" disabled title="Compte désactivé">
+                <i class="fas fa-pause-circle me-1"></i> Compte désactivé
+            </button>
+            <small class="text-muted d-block text-center mt-1">
+                Réactivez votre compte depuis votre tableau de bord
+            </small>
+        {% else %}
+            <form action="{% url 'donneur:repondre_appel' demande.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 rounded-pill">
+                    Répondre à l'appel
+                </button>
+            </form>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-danger w-100 rounded-pill">
+            Se connecter pour répondre
+        </a>
+    {% endif %}
+</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+
+            <div class="alert alert-info text-center">
+
+                Aucune demande urgente disponible.
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* Animation badge LIVE */
+.pulse-animation {
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(230, 57, 70, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+    }
+}
+
+.carousel-item {
+    transition: transform 0.8s ease-in-out;
+}
+
+</style>
+
+{% endblock %}

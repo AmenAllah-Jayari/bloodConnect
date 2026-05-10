@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-danger">
+            <i class="fas fa-hospital me-2"></i>Hôpitaux partenaires
+        </h2>
+        <span class="badge bg-danger">{{ hopitaux.count }} établissement(s)</span>
+    </div>
+
+    {% if query %}
+        <p class="text-muted">Résultats pour : <strong>"{{ query }}"</strong></p>
+    {% endif %}
+
+    <div class="row">
+        {% for hopital in hopitaux %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">
+                            <i class="fas fa-hospital me-2"></i>{{ hopital.nom }}
+                        </h5>
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt text-muted me-1"></i>
+                            <strong>Adresse:</strong> {{ hopital.adresse }}<br>
+                            <i class="fas fa-city text-muted me-1"></i>
+                            <strong>Ville:</strong> {{ hopital.ville }}<br>
+                            {% if hopital.telephone %}
+                                <i class="fas fa-phone text-muted me-1"></i>
+                                <strong>Téléphone:</strong> {{ hopital.telephone }}
+                            {% endif %}
+                        </p>
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-circle me-1"></i>Établissement vérifié
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-search me-2"></i>Aucun hôpital trouvé pour cette recherche.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary mt-3 rounded-pill">
+        <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+    </a>
+</div>
+{% endblock %}

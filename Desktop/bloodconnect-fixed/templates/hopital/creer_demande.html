@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-danger text-white text-center py-3 rounded-top-4">
+                <h3 class="mb-0 fw-bold">📢 Créer une Demande Urgente</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Sélection du Groupe Sanguin -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Groupe Sanguin Requis</label>
+                        <select name="groupe_sanguin" class="form-select form-select-lg border-danger" required>
+                            <option value="" selected disabled>Choisir le groupe...</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantité de poches -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Quantité de poches</label>
+                        <input type="number" name="quantite" class="form-control form-control-lg border-danger" 
+                            placeholder="Nombre de poches nécessaires" required min="1">
+                    </div>
+
+                    <!-- Délai -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Délai limite</label>
+                        <input type="date" name="delai" class="form-control form-control-lg border-danger" required>
+                    </div>
+
+                    <!-- Description de l'urgence -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Détails de la demande</label>
+                        <textarea name="description" class="form-control" rows="4" 
+                            placeholder="Exemple: Besoin de 3 poches pour une chirurgie cardiaque urgente..."></textarea>
+                        <div class="form-text">Expliquez brièvement pourquoi le don est nécessaire.</div>
+                    </div>
+
+                    <!-- Bouton de Publication -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-blood btn-lg shadow">
+                            <i class="bi bi-megaphone-fill me-2"></i>Publier l'Annonce
+                        </button>
+                        <a href="{% url 'hopital:dashboard' %}" class="btn btn-outline-secondary rounded-pill">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Nasta3mlou el CSS mte3ek elli fi base.html */
+    .form-select:focus, .form-control:focus {
+        border-color: var(--blood-red);
+        box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25);
+    }
+</style>
+{% endblock %}
